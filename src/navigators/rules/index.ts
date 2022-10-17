@@ -1,6 +1,7 @@
 import { ArrayNavigatorRule, ObjectNavigatorRule, PrimitiveNavigatorRule } from './rules';
-import type { NavigatorOptions, Navigator } from '../interfaces';
 import type { NavigatorRuleConstruct } from './interfaces';
+import type { NavigatorOptions } from '../../interfaces';
+import type { Navigator } from '../interfaces';
 
 export abstract class NavigatorRunner {
   static for<T = any>(options: NavigatorOptions<T>): Navigator<T> {

@@ -15,7 +15,14 @@ import {
 
 export abstract class SourceIdentifier {
   static identify(source: any): Metadata {
-    const rules: SourceRuleConstruct<any>[] = [
+    return this.getRules()
+      .map((Rule) => new Rule(source))
+      .find((rule) => rule.canIdentify())
+      .identity();
+  }
+
+  private static getRules(): SourceRuleConstruct<any>[] {
+    return [
       FunctionIdentifier,
       WeakMapIdentifier,
       WeakSetIdentifier,
@@ -27,10 +34,5 @@ export abstract class SourceIdentifier {
       ConstructorIdentifier,
       PrimitiveIdentifier,
     ];
-
-    return rules
-      .map((Rule) => new Rule(source))
-      .find((rule) => rule.canIdentify())
-      .identity();
   }
 }

@@ -1,4 +1,4 @@
-import type { NavigationEnd } from '../src/navigators/interfaces';
+import type { NavigationEnd } from '../src/interfaces';
 import { Collector } from '../src/collector';
 import { expect } from 'chai';
 
@@ -20,14 +20,15 @@ describe(`Collector`, () => {
       const path = 'account.id';
       const options: NavigationEnd<any> = {
         path,
+        depth: 2,
         source: 1234,
-        endPoint: 'id',
+        endpoint: 'id',
         original: 1234,
-        isEndPoint: true,
+        isEndpoint: true,
         meta: { type: 'number' },
       };
 
-      expect(collector.add(path, options)).to.equal(collector);
+      expect(collector.add(options)).to.equal(collector);
       expect(collector.size).to.equal(1);
     });
 
@@ -35,16 +36,17 @@ describe(`Collector`, () => {
       const path1 = 'account.id';
       const path2 = 'accounts[0].id';
       const options: NavigationEnd<any> = {
+        depth: 2,
         path: path1,
         source: 1234,
-        endPoint: 'id',
+        endpoint: 'id',
         original: 1234,
-        isEndPoint: true,
+        isEndpoint: true,
         meta: { type: 'number' },
       };
 
-      expect(collector.add(path1, options)).to.equal(collector);
-      expect(collector.add(path2, options)).to.equal(collector);
+      expect(collector.add(options)).to.equal(collector);
+      expect(collector.add({ ...options, path: path2 })).to.equal(collector);
       expect(collector.size).to.equal(2);
     });
   });

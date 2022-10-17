@@ -1,7 +1,8 @@
-import { NavigationEnd } from '../navigators';
+import { NavigationEnd } from '../interfaces';
 
 export interface Collectivism {
-  add(path: string, options: NavigationEnd<any>): this;
+  values(): IterableIterator<NavigationEnd<any>>;
+  add(options: NavigationEnd<any>): this;
   size: number;
 }
 
@@ -9,20 +10,23 @@ export class Collector implements Collectivism {
   readonly paths = new Map<string, NavigationEnd<any>>();
 
   /**
-   * @description Add a path to a containing map. Returns self
+   * @description Add a NavigationEnd object to a containing map.
    *
-   * @param {string} path
    * @param {NavigationEnd<any>} options
    * @returns {this}
    * @memberof Collector
    */
-  add(path: string, options: NavigationEnd<any>): this {
-    this.paths.set(path, options);
+  add(options: NavigationEnd<any>): this {
+    this.paths.set(options.path, options);
 
     return this;
   }
 
   get size(): number {
     return this.paths.size;
+  }
+
+  values(): IterableIterator<NavigationEnd<any>> {
+    return this.paths.values();
   }
 }

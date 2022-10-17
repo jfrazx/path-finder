@@ -10,7 +10,10 @@ export class ObjectIdentifier<
   T extends ObjectMetadata = ObjectMetadata,
 > extends SourceIdentification<T> {
   canIdentify(): boolean {
-    return this.isObject() && !this.hasConstructor();
+    return (
+      this.isObject() &&
+      (!this.hasConstructor() || this.className?.toLowerCase() === Types.Object)
+    );
   }
 
   identity(): T {

@@ -6,6 +6,7 @@ export class NullIdentifier extends SourceIdentification<Metadata> {
   canIdentify(): boolean {
     return this.source === null;
   }
+
   identity(): Metadata {
     return {
       type: Types.Null,

@@ -1,59 +1,62 @@
-import { PathFinder } from '../src';
+import { PathFinder } from '../src/finder';
+import { objectTraversal } from './lib';
 import { expect } from 'chai';
 
 describe(`PathFinder`, () => {
-  class Shape {
-    id = Math.ceil(Math.random() * 1000);
-    type = 'circular';
-  }
-
-  const o = {
-    failure: null as null,
-    content: {
-      items: [
-        { id: 1, description: 'this is item one' },
-        {
-          id: 2,
-          description: 'this is item two',
-          attributes: [
-            'color',
-            'size',
-            {
-              person: {
-                id: 12345,
-                name: 'Sally',
-                age: 1.618,
-                height: 54,
-              },
-            },
-          ],
-        },
-      ],
-    },
-    person: {
-      id: 73,
-      shape: new Shape(),
-      name: 'Bob',
-      height: 72,
-      age: 3.14,
-    },
-  } as const;
-
   describe(`General`, () => {
     it(`should be an instance of PathFinder`, () => {
-      expect(new PathFinder({ endPoint: '' })).to.be.instanceOf(PathFinder);
+      expect(new PathFinder({ endpoint: '' })).to.be.instanceOf(PathFinder);
     });
   });
 
   describe(`Paths`, () => {
-    it(`should return an array of objects`, () => {
-      const pathFinder = new PathFinder({ endPoint: 'id' });
+    it(`should return an iterable`, () => {
+      const pathFinder = new PathFinder({ endpoint: 'id', alwaysCollect: false });
+      const endPointsIterable = pathFinder.find(objectTraversal);
 
-      const endPoints = pathFinder.find(o);
+      expect(endPointsIterable[Symbol.iterator]).to.be.a('function');
+    });
 
-      console.log(endPoints);
+    it(`should locate paths from an endpoint`, () => {
+      const pathFinder = new PathFinder({ endpoint: 'id', alwaysCollect: false });
+      const endpointsIterable = pathFinder.find(objectTraversal);
 
-      expect(endPoints).to.be.an('array');
+      const endpoints = [...endpointsIterable];
+
+      expect(endpoints).to.have.length.greaterThan(1);
+    });
+
+    it(`should collect all paths`, () => {
+      const pathFinder = new PathFinder({ endpoint: '*' });
+      const obj = { content: 'stuff', people: [{ id: 1, arms: 5 }] };
+
+      const paths = pathFinder.findAll(obj);
+
+      console.log(paths);
+    });
+  });
+
+  describe(`Endpoint`, () => {
+    it(`should have the correct properties`, () => {
+      const pathFinder = new PathFinder({ endpoint: 'id', alwaysCollect: false });
+      const [endpoint] = [...pathFinder.find(objectTraversal)];
+
+      const properties = [
+        'meta',
+        'path',
+        'depth',
+        'source',
+        'endpoint',
+        'original',
+        'isEndpoint',
+      ];
+
+      expect(endpoint).to.be.an('object');
+      expect(endpoint).to.have.keys(properties);
+      expect(Object.keys(endpoint)).to.have.lengthOf(properties.length);
+
+      expect(endpoint.meta).to.be.an('object');
+      expect(endpoint.meta.type).to.equal('number');
     });
   });
 });
