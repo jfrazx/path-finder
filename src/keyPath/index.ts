@@ -1,23 +1,22 @@
-import type { KeyOptions, NavigationEnd } from '../interfaces';
+import type { KeyOptions, NavigationEnd, Metadata } from '../interfaces';
+import type { EndpointIdentified } from '../endpoints/interfaces';
+import { SourceIdentifier } from '../identification';
 import { NavigatorRunner } from '../navigators';
 import { Collectivism } from '../collector';
 import { Endpoints } from '../endpoints';
-import { Meta } from '../meta';
 
-export class KeyPath<T> extends Meta<T> {
-  constructor(protected readonly options: KeyOptions<T>) {
-    super(options);
-  }
+export class KeyPath<T> {
+  constructor(private readonly options: KeyOptions<T>) {}
 
   identify(collected: number) {
     return this.identifier(false, collected);
   }
 
-  protected identifier(pathComplete: boolean, collected: number) {
+  protected identifier(pathComplete: boolean, collected: number): EndpointIdentified {
     return Endpoints.for({ ...this.options, pathComplete, collected });
   }
 
-  collect(collector: Collectivism, isEndpoint: boolean) {
+  collect(collector: Collectivism, isEndpoint: boolean): Collectivism {
     const navigationEnd = this.build(isEndpoint);
 
     return collector.add(navigationEnd);
@@ -35,6 +34,10 @@ export class KeyPath<T> extends Meta<T> {
       path: currentPath,
       meta: this.meta(value),
     };
+  }
+
+  protected meta(source: T): Metadata {
+    return SourceIdentifier.identify(source);
   }
 
   navigate(): KeyPath<T>[] {

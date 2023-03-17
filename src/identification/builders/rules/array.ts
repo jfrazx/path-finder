@@ -3,7 +3,7 @@ import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
 export interface ArrayMetadata extends Metadata {
-  length: number;
+  readonly length: number;
 }
 
 export class ArrayIdentifier extends SourceIdentification<ArrayMetadata> {

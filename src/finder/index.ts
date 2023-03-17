@@ -22,9 +22,9 @@ const defaultOptions: DefaultPathFinderOptions = {
 };
 
 export class PathFinder<T = any> implements Finder<T> {
-  private readonly options: RequiredPathFinderOptions;
+  private readonly options: PathFinderOptions;
 
-  constructor(options: PathFinderOptions) {
+  constructor(options: PathFinderOptions = {}) {
     this.options = { ...defaultOptions, ...options };
   }
 
@@ -43,7 +43,7 @@ export class PathFinder<T = any> implements Finder<T> {
   findAll<Source = T>(
     source: ContentWithSearchablePath<Source>,
     options: Partial<PathFinderOptions> = this.options,
-  ): Iterable<NavigationEnd<Source>> {
+  ): NavigationEnd<Source>[] {
     return this.find(source, {
       ...options,
       endpoint: '*',
@@ -53,23 +53,32 @@ export class PathFinder<T = any> implements Finder<T> {
   find<Source = T>(
     source: ContentWithSearchablePath<Source>,
     options: Partial<PathFinderOptions> = this.options,
-  ): Iterable<NavigationEnd<Source>> {
+  ): NavigationEnd<Source>[] {
     const useOptions = this.optionsModifier(options);
-    const collector = new Collector();
 
-    const navigator = NavigatorRunner.for<any>({
+    const navigator = NavigatorRunner.for<Source>({
       ...useOptions,
       depth: 0,
       original: source,
       source: source as Source,
     });
 
-    return this.identifyEndpoints(navigator.navigate(''), collector).values();
+    return this.identifyEndpoints<Source>(navigator.navigate(''), useOptions);
   }
 
-  private identifyEndpoints(keyPaths: KeyPath<T>[], collector: Collectivism): Collectivism {
-    const queue = new KeyPathQueue(keyPaths, this.options);
+  private identifyEndpoints<Source>(
+    keyPaths: KeyPath<Source>[],
+    options: RequiredPathFinderOptions,
+  ): NavigationEnd<Source>[] {
+    const queue = new KeyPathQueue(keyPaths, options);
+    const collector = new Collector();
 
+    this.processQueue(queue, collector);
+
+    return [...collector.values()];
+  }
+
+  private processQueue(queue: KeyPathQueue, collector: Collectivism): void {
     for (const keyPath of queue.process()) {
       const { isEndpoint, shouldContinue } = keyPath.identify(collector.size);
 
@@ -77,20 +86,28 @@ export class PathFinder<T = any> implements Finder<T> {
         keyPath.collect(collector, isEndpoint);
       }
 
-      if (!shouldContinue) {
-        continue;
+      if (shouldContinue) {
+        queue.add(keyPath.navigate());
       }
-
-      queue.add(keyPath.navigate());
     }
-
-    return collector;
   }
 
   private optionsModifier(options: Partial<PathFinderOptions>): RequiredPathFinderOptions {
-    const useOptions = { ...this.options, ...options };
+    const useOptions = { ...this.options, ...options } as RequiredPathFinderOptions;
     const { firstMatch } = useOptions;
 
+    this.validateEndpoint(useOptions.endpoint);
+
     return firstMatch ? { ...useOptions, sample: 1 } : useOptions;
+  }
+
+  private validateEndpoint(endpoint: string | undefined): never | void {
+    if (typeof endpoint !== 'string' || endpoint.trim() === '') {
+      throw new Error(`${this.className}: No endpoint provided`);
+    }
+  }
+
+  protected get className(): string {
+    return this.constructor.name;
   }
 }

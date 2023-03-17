@@ -3,7 +3,7 @@ import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
 export interface ObjectMetadata extends Metadata {
-  properties: string[];
+  readonly properties: string[];
 }
 
 export class ObjectIdentifier<

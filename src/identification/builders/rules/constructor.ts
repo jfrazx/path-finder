@@ -3,7 +3,7 @@ import { ObjectIdentifier } from './object';
 import { Types } from '../constants';
 
 export interface ConstructorMetadata extends ObjectMetadata {
-  instance: string;
+  readonly instance: string;
 }
 
 export class ConstructorIdentifier extends ObjectIdentifier<ConstructorMetadata> {

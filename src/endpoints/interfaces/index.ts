@@ -3,7 +3,7 @@ export interface EndpointIdentity {
 }
 
 export interface EndpointIdentified {
-  shouldContinue: boolean;
-  pathComplete: boolean;
-  isEndpoint: boolean;
+  readonly shouldContinue: boolean;
+  readonly pathComplete: boolean;
+  readonly isEndpoint: boolean;
 }

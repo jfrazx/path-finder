@@ -1,8 +1,9 @@
 import type { NavigatorOptions } from '../../interfaces';
 import type { Navigator } from '../interfaces';
-import type { KeyPath } from '../../keyPath';
+import { KeyPath } from '../../keyPath';
 
 export abstract class Navigable<T> implements Navigator<T> {
+  protected abstract buildPath(currentPath: string, key: number | string): string;
   abstract navigate(currentPath: string): KeyPath<T>[];
 
   constructor(protected options: NavigatorOptions<T>) {}
@@ -13,5 +14,15 @@ export abstract class Navigable<T> implements Navigator<T> {
 
   protected get increaseDepth(): number {
     return this.options.depth + 1;
+  }
+
+  protected generateKeyPath(path: string, key: string | number, value: any): KeyPath<T> {
+    return new KeyPath({
+      ...this.options,
+      currentPath: this.buildPath(path, key),
+      depth: this.increaseDepth,
+      value,
+      key,
+    });
   }
 }

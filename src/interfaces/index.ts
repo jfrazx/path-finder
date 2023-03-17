@@ -1,10 +1,5 @@
 export type ContentWithSearchablePath<T = any> = T extends object ? T : Array<T>;
 
-export interface MetaContent<T> {
-  original: ContentWithSearchablePath<T>;
-  source: T;
-}
-
 export interface PathFinderOptions {
   /**
    * @description Indicates if all paths to endpoints should be collected
@@ -24,14 +19,14 @@ export interface PathFinderOptions {
    * @type {string}
    * @memberof PathFinderOptions
    */
-  endpoint: string;
+  endpoint?: string;
 
   /**
    * @description Paths hints to indicate accurate endpoints.
    *
    * @default []
    *
-   * @note Default mode is hints needs to exists somewhere in the current path
+   * @note Default mode is hints need to exist somewhere in the current path
    *
    * @type {string[]}
    * @memberof PathFinderOptions
@@ -87,26 +82,30 @@ export type RequiredPathFinderOptions = Required<PathFinderOptions>;
 export type DefaultPathFinderOptions = Omit<RequiredPathFinderOptions, 'endpoint'>;
 
 export interface Metadata {
-  type: string;
+  readonly type: string;
 }
 
 export interface Finder<T = any> {
   find<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
-  ): Iterable<NavigationEnd<Source>>;
+  ): NavigationEnd<Source>[];
+
   findAll<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
-  ): Iterable<NavigationEnd<Source>>;
+  ): NavigationEnd<Source>[];
+
   firstMatch<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
   ): NavigationEnd<Source> | undefined;
 }
 
-export interface NavigatorOptions<T> extends MetaContent<T>, RequiredPathFinderOptions {
+export interface NavigatorOptions<T> extends RequiredPathFinderOptions {
+  original: ContentWithSearchablePath<T>;
   depth: number;
+  source: T;
 }
 
 interface SharedOptions<T> extends NavigatorOptions<T> {

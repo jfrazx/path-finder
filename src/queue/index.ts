@@ -2,10 +2,11 @@ import type { RequiredPathFinderOptions } from '../interfaces';
 import type { KeyPath } from '../keyPath';
 
 export class KeyPathQueue {
-  private queue: KeyPath<any>[] = [];
+  private readonly queue: KeyPath<any>[] = [];
+  private currentIndex = 0;
 
   constructor(paths: KeyPath<any>[], private options: RequiredPathFinderOptions) {
-    this.queue.push(...paths);
+    this.addBreadthFirst(paths);
   }
 
   add(paths: KeyPath<any>[]): void {
@@ -17,11 +18,13 @@ export class KeyPathQueue {
   }
 
   private addDepthFirst(paths: KeyPath<any>[]): void {
-    this.queue.unshift(...paths);
+    this.queue.splice(this.currentIndex + 1, 0, ...paths);
   }
 
   *process(): Generator<KeyPath<any>, void, void> {
-    for (const keyPath of this.queue) {
+    for (const [index, keyPath] of this.queue.entries()) {
+      this.currentIndex = index;
+
       yield keyPath;
     }
   }

@@ -3,8 +3,8 @@ import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
 export interface MapMetadata extends Metadata {
-  size: number;
-  keys: string[];
+  readonly keys: string[];
+  readonly size: number;
 }
 
 export class MapIdentifier extends SourceIdentification<MapMetadata> {
