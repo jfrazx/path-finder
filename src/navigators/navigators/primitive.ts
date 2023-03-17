@@ -1,19 +1,19 @@
-import type { NavigationEnd } from '../interfaces';
+import { FinalKeyPath, KeyPath } from '../../keyPath';
 import { Navigable } from '../base';
 
 export class PrimitiveNavigator<T> extends Navigable<T> {
-  navigate(path: string): NavigationEnd<T>[] {
-    const { source, original, endPoint } = this.options;
-
+  navigate(path: string): KeyPath<T>[] {
     return [
-      {
-        path,
-        source,
-        endPoint,
-        original,
-        meta: this.meta(),
-        isEndPoint: false,
-      },
+      new FinalKeyPath({
+        ...this.options,
+        currentPath: this.buildPath(path),
+        value: this.source,
+        key: null,
+      }),
     ];
+  }
+
+  protected buildPath(currentPath: string): string {
+    return currentPath;
   }
 }

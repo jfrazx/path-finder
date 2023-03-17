@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "outDir": "dist",
     "sourceMap": true,
     "target": "es2016",
     "declaration": true,
@@ -17,5 +18,6 @@
     "strictFunctionTypes": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["src"]
 }

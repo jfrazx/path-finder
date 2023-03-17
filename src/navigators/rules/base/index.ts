@@ -1,6 +1,6 @@
-import type { ContentWithSearchablePath } from '../../../interfaces';
-import type { NavigatorOptions, Navigator } from '../../interfaces';
+import type { NavigatorOptions } from '../../../interfaces';
 import type { NavigatorRule } from '../interfaces';
+import type { Navigator } from '../../interfaces';
 
 export abstract class NavigatorRuleBase<T> implements NavigatorRule<T> {
   constructor(protected readonly options: NavigatorOptions<T>) {}
@@ -8,7 +8,7 @@ export abstract class NavigatorRuleBase<T> implements NavigatorRule<T> {
   abstract shouldNavigate(): boolean;
   abstract getNavigator(): Navigator<T | T[]>;
 
-  protected get source(): ContentWithSearchablePath<T> {
+  protected get source(): T {
     return this.options.source;
   }
 }

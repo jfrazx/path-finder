@@ -3,7 +3,7 @@ import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
 export interface SetMetadata extends Metadata {
-  size: number;
+  readonly size: number;
 }
 
 export class SetIdentifier extends SourceIdentification<SetMetadata> {

@@ -1,16 +1,10 @@
-import type { PathFinderOptions, ContentWithSearchablePath, Finder } from './interfaces';
-import { NavigatorRunner } from './navigators';
+import * as identification from './identification';
+import * as navigators from './navigators';
+import * as keyPaths from './keyPath';
 
-export class PathFinder<T = any> implements Finder<T> {
-  constructor(private readonly options: PathFinderOptions) {}
+export type { Finder, NavigationEnd, PathFinderOptions } from './interfaces';
+export { PathFinder } from './finder';
 
-  find(source: ContentWithSearchablePath<T>) {
-    const navigator = NavigatorRunner.for<T>({
-      ...this.options,
-      original: source,
-      source,
-    });
+export * from './helper';
 
-    return navigator.navigate('');
-  }
-}
+export { keyPaths, navigators, identification };

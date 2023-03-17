@@ -2,6 +2,14 @@ import { ObjectNavigator } from '../../navigators';
 import type { Navigator } from '../../interfaces';
 import { NavigatorRuleBase } from '../base';
 
+/**
+ * @description Rule that identifies objects and provides the Object Navigator
+ *
+ * @export
+ * @class ObjectNavigatorRule
+ * @extends {NavigatorRuleBase<T>}
+ * @template T
+ */
 export class ObjectNavigatorRule<T extends object> extends NavigatorRuleBase<T> {
   shouldNavigate(): boolean {
     return (

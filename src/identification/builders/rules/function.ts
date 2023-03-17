@@ -3,8 +3,8 @@ import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
 export interface FunctionMetadata extends Metadata {
-  length: number;
-  name: string;
+  readonly length: number;
+  readonly name: string;
 }
 
 export class FunctionIdentifier extends SourceIdentification<FunctionMetadata> {
