@@ -1,10 +1,12 @@
-import { Collector, Collectivism } from '../collector';
-import { NavigatorRunner } from '../navigators';
+import { NavigatorRunner, Navigator } from '../navigators';
+import { isRegExp, isString } from '../utils';
+import { Collector } from '../collector';
 import { KeyPathQueue } from '../queue';
 import { KeyPath } from '../keyPath';
 import type {
   Finder,
-  NavigationEnd,
+  Endpoint,
+  Endpoints,
   PathFinderOptions,
   DefaultPathFinderOptions,
   ContentWithSearchablePath,
@@ -19,6 +21,7 @@ const defaultOptions: DefaultPathFinderOptions = {
   maxDepth: Infinity,
   strictHints: false,
   alwaysCollect: false,
+  preemptiveEndpoints: true,
 };
 
 export class PathFinder<T = any> implements Finder<T> {
@@ -28,10 +31,10 @@ export class PathFinder<T = any> implements Finder<T> {
     this.options = { ...defaultOptions, ...options };
   }
 
-  firstMatch<Source = T>(
+  first<Source = T>(
     source: ContentWithSearchablePath<Source>,
     options: Partial<PathFinderOptions> = this.options,
-  ): NavigationEnd<Source> | undefined {
+  ): Endpoint<Source> | undefined {
     const [matched] = this.find(source, {
       ...options,
       firstMatch: true,
@@ -40,10 +43,10 @@ export class PathFinder<T = any> implements Finder<T> {
     return matched;
   }
 
-  findAll<Source = T>(
+  map<Source = T>(
     source: ContentWithSearchablePath<Source>,
     options: Partial<PathFinderOptions> = this.options,
-  ): NavigationEnd<Source>[] {
+  ): Endpoints<Source> {
     return this.find(source, {
       ...options,
       endpoint: '*',
@@ -53,10 +56,10 @@ export class PathFinder<T = any> implements Finder<T> {
   find<Source = T>(
     source: ContentWithSearchablePath<Source>,
     options: Partial<PathFinderOptions> = this.options,
-  ): NavigationEnd<Source>[] {
-    const useOptions = this.optionsModifier(options);
+  ): Endpoints<Source> {
+    const useOptions: Required<PathFinderOptions> = this.optionsModifier(options);
 
-    const navigator = NavigatorRunner.for<Source>({
+    const navigator: Navigator<Source> = NavigatorRunner.for<Source>({
       ...useOptions,
       depth: 0,
       original: source,
@@ -69,7 +72,7 @@ export class PathFinder<T = any> implements Finder<T> {
   private identifyEndpoints<Source>(
     keyPaths: KeyPath<Source>[],
     options: RequiredPathFinderOptions,
-  ): NavigationEnd<Source>[] {
+  ): Endpoint<Source>[] {
     const queue = new KeyPathQueue(keyPaths, options);
     const collector = new Collector();
 
@@ -78,12 +81,20 @@ export class PathFinder<T = any> implements Finder<T> {
     return [...collector.values()];
   }
 
-  private processQueue(queue: KeyPathQueue, collector: Collectivism): void {
+  /**
+   * @description Processes keypath objects to identify endpoints
+   *
+   * @private
+   * @param {KeyPathQueue} queue
+   * @param {Collector} collector
+   * @memberof PathFinder
+   */
+  private processQueue(queue: KeyPathQueue, collector: Collector): void {
     for (const keyPath of queue.process()) {
-      const { isEndpoint, shouldContinue } = keyPath.identify(collector.size);
+      const { isEndpoint, shouldContinue, pathComplete } = keyPath.identify(collector.size);
 
       if (isEndpoint || keyPath.alwaysCollect) {
-        keyPath.collect(collector, isEndpoint);
+        collector.collect(keyPath.build(isEndpoint, pathComplete));
       }
 
       if (shouldContinue) {
@@ -101,9 +112,9 @@ export class PathFinder<T = any> implements Finder<T> {
     return firstMatch ? { ...useOptions, sample: 1 } : useOptions;
   }
 
-  private validateEndpoint(endpoint: string | undefined): never | void {
-    if (typeof endpoint !== 'string' || endpoint.trim() === '') {
-      throw new Error(`${this.className}: No endpoint provided`);
+  private validateEndpoint(endpoint: RegExp | string | undefined): never | void {
+    if ((!isString(endpoint) || endpoint.trim() === '') && !isRegExp(endpoint)) {
+      throw new Error(`${this.className}: No suitable endpoint provided: ${endpoint}`);
     }
   }
 

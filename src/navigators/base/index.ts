@@ -16,6 +16,16 @@ export abstract class Navigable<T> implements Navigator<T> {
     return this.options.depth + 1;
   }
 
+  /**
+   * @description Generate a KeyPath for the current navigator
+   *
+   * @protected
+   * @param {string} path
+   * @param {(string | number)} key
+   * @param {*} value
+   * @returns {KeyPath<T>}
+   * @memberof Navigable
+   */
   protected generateKeyPath(path: string, key: string | number, value: any): KeyPath<T> {
     return new KeyPath({
       ...this.options,

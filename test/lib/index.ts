@@ -20,6 +20,7 @@ export const objectTraversal = {
               name: 'Sally',
               age: 1.618,
               height: 54,
+              ripped: true,
             },
           },
         ],
@@ -32,7 +33,12 @@ export const objectTraversal = {
     name: 'Bob',
     height: 72,
     age: 3.14,
+    ripped: false,
   },
+  mappable: new Map<string, string>([
+    ['one', 'two'],
+    ['three', 'four'],
+  ]),
 } as const;
 
 export const arrayTraversal = [objectTraversal, objectTraversal, objectTraversal];

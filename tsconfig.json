@@ -13,9 +13,10 @@
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "lib": ["esnext", "DOM"],
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noUnusedParameters": true,
     "strictFunctionTypes": true,
+    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },

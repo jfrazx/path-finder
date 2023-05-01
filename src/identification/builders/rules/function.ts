@@ -1,4 +1,4 @@
-import { Metadata } from '../../../interfaces';
+import type { Metadata } from '../../../interfaces';
 import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 
@@ -16,9 +16,9 @@ export class FunctionIdentifier extends SourceIdentification<FunctionMetadata> {
     const source: Function = this.source;
 
     return {
-      name: source.name,
       type: Types.Function,
       length: source.length,
+      name: source.name === '' ? 'anonymous' : source.name,
     };
   }
 }

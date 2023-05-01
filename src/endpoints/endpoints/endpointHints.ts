@@ -1,18 +1,22 @@
 import type { EndpointIdentified, EndpointIdentity } from '../interfaces';
+import { isString } from '../../utils';
 import { EndPointer } from '../base';
 
 export class EndpointHints<T> extends EndPointer<T> implements EndpointIdentity {
   identify(): EndpointIdentified {
     const { endpoint, key } = this.options;
 
-    const isEndpoint = endpoint === key && this.hintsMatch();
+    const isEndpoint = this.evaluateEndpoint(endpoint, key) && this.hintsMatch();
 
     return {
       isEndpoint,
       pathComplete: this.pathComplete,
-      shouldContinue:
-        !isEndpoint && this.hasNotReachedMaxDepth() && this.sampleSizeNotMet(isEndpoint),
+      shouldContinue: this.shouldContinue(isEndpoint),
     };
+  }
+
+  private evaluateEndpoint(endpoint: string | RegExp, key: string | number | null): boolean {
+    return isString(endpoint) ? endpoint === key : endpoint.test(key?.toString() as string);
   }
 
   private hintsMatch(): boolean {
@@ -21,5 +25,13 @@ export class EndpointHints<T> extends EndPointer<T> implements EndpointIdentity 
     return strictHints
       ? new RegExp(hints.join('(\\[\\d+\\]\\.|\\.)')).test(currentPath)
       : hints.every((hint: string) => currentPath.includes(hint));
+  }
+
+  private shouldContinue(isEndpoint: boolean): boolean {
+    return (
+      (!isEndpoint || !this.options.preemptiveEndpoints) &&
+      this.hasNotReachedMaxDepth() &&
+      this.sampleSizeNotMet(isEndpoint)
+    );
   }
 }

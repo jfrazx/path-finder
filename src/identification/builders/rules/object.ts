@@ -1,5 +1,6 @@
 import type { Metadata } from '../../../interfaces';
 import { SourceIdentification } from '../base';
+import { isObject } from '../../../utils';
 import { Types } from '../constants';
 
 export interface ObjectMetadata extends Metadata {
@@ -32,10 +33,6 @@ export class ObjectIdentifier<
   }
 
   protected isObject(): boolean {
-    return (
-      Boolean(this.source) &&
-      !Array.isArray(this.source) &&
-      typeof this.source === Types.Object
-    );
+    return isObject(this.source);
   }
 }
