@@ -11,10 +11,11 @@ export abstract class NavigatorRunner {
   ];
 
   static for<T = any>(options: NavigatorOptions<T>): Navigator<T> {
-    return this.rules
+    const navigator: NavigatorRule<any> = this.rules
       .map((Rule: NavigatorRuleConstruct<any>) => new Rule(options))
-      .find((rule: NavigatorRule<any>) => rule.shouldNavigate())
-      .getNavigator();
+      .find((rule: NavigatorRule<any>) => rule.shouldNavigate()) as NavigatorRule<any>;
+
+    return navigator.getNavigator();
   }
 
   /**
@@ -28,6 +29,17 @@ export abstract class NavigatorRunner {
    */
   static setRules(rules: NavigatorRuleConstruct<any>[]): void {
     this.rules = rules;
+  }
+
+  /**
+   * @description Add a navigator rule to the beginning of existing rules
+   *
+   * @static
+   * @param {NavigatorRuleConstruct<any>} rule
+   * @memberof NavigatorRunner
+   */
+  static addRule(rule: NavigatorRuleConstruct<any>): void {
+    this.addRules([rule]);
   }
 
   /**

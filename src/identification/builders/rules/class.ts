@@ -2,19 +2,19 @@ import type { ObjectMetadata } from './object';
 import { ObjectIdentifier } from './object';
 import { Types } from '../constants';
 
-export interface ConstructorMetadata extends ObjectMetadata {
+export interface ClassMetadata extends ObjectMetadata {
   readonly instance: string;
 }
 
-export class ConstructorIdentifier extends ObjectIdentifier<ConstructorMetadata> {
+export class ClassIdentifier extends ObjectIdentifier<ClassMetadata> {
   canIdentify(): boolean {
     return this.isObject() && this.hasConstructor();
   }
 
-  identity(): ConstructorMetadata {
+  identity(): ClassMetadata {
     return {
       ...super.identity(),
-      instance: this.className,
+      instance: this.className as string,
       type: Types.Class,
     };
   }

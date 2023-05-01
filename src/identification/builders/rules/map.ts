@@ -1,4 +1,4 @@
-import { Metadata } from '../../../interfaces';
+import type { Metadata } from '../../../interfaces';
 import { SourceIdentification } from '../base';
 import { Types } from '../constants';
 

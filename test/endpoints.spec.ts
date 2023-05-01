@@ -19,6 +19,7 @@ describe(`Endpoints`, () => {
     pathComplete: false,
     alwaysCollect: false,
     currentPath: '[0].fish',
+    preemptiveEndpoints: true,
     original: [{ fish: 'blue' }],
   };
 

@@ -8,6 +8,6 @@ import { PathFinder } from '../finder';
  * @param {PathFinderOptions} options
  * @returns {Finder<T>}
  */
-export const pathFinder = <T = any>(options: PathFinderOptions): Finder<T> => {
+export const pathFinder = <T = any>(options: PathFinderOptions = {}): Finder<T> => {
   return new PathFinder<T>(options);
 };

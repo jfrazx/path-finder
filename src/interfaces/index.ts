@@ -12,14 +12,24 @@ export interface PathFinderOptions {
   alwaysCollect?: boolean;
 
   /**
-   * @description String that identifies a path endpoint
+   * @description Terminate path endpoint discovery on first path endpoint identification
+   *
+   * @default true
+   *
+   * @type {boolean}
+   * @memberof PathFinderOptions
+   */
+  preemptiveEndpoints?: boolean;
+
+  /**
+   * @description String or regexp that identifies a path endpoint
    *
    * @note Passing '*' will map all endpoints
    *
    * @type {string}
    * @memberof PathFinderOptions
    */
-  endpoint?: string;
+  endpoint?: string | RegExp;
 
   /**
    * @description Paths hints to indicate accurate endpoints.
@@ -42,7 +52,7 @@ export interface PathFinderOptions {
   firstMatch?: boolean;
 
   /**
-   * @description if true then hints must be in order
+   * @description if true, then hints must be in order
    *
    * @default false
    *
@@ -89,17 +99,17 @@ export interface Finder<T = any> {
   find<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
-  ): NavigationEnd<Source>[];
+  ): Endpoint<Source>[];
 
-  findAll<Source = T>(
+  map<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
-  ): NavigationEnd<Source>[];
+  ): Endpoint<Source>[];
 
-  firstMatch<Source = T>(
+  first<Source = T>(
     searchObject: ContentWithSearchablePath<Source>,
     options?: Partial<PathFinderOptions>,
-  ): NavigationEnd<Source> | undefined;
+  ): Endpoint<Source> | undefined;
 }
 
 export interface NavigatorOptions<T> extends RequiredPathFinderOptions {
@@ -109,7 +119,7 @@ export interface NavigatorOptions<T> extends RequiredPathFinderOptions {
 }
 
 interface SharedOptions<T> extends NavigatorOptions<T> {
-  key: string | number;
+  key: string | number | null;
   currentPath: string;
 }
 
@@ -135,10 +145,21 @@ export interface KeyOptions<T> extends SharedOptions<T> {
   value: any;
 }
 
-export interface NavigationEnd<T>
+/**
+ * @description Endpoint information
+ *
+ * @export
+ * @interface Endpoint
+ * @extends {Omit<NavigatorOptions<T>, keyof Omit<PathFinderOptions, 'endpoint'>>}
+ * @template T
+ */
+export interface Endpoint<T = any>
   extends Omit<NavigatorOptions<T>, keyof Omit<PathFinderOptions, 'endpoint'>> {
+  pathComplete: boolean;
   isEndpoint: boolean;
   meta: Metadata;
   path: string;
   source: T;
 }
+
+export type Endpoints<T = any> = Endpoint<T>[];

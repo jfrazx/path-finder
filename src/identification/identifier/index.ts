@@ -1,13 +1,13 @@
 import type { SourceRuleConstruct, SourceRule } from '../builders';
 import type { Metadata } from '../../interfaces';
 import {
-  ConstructorIdentifier,
   PrimitiveIdentifier,
   FunctionIdentifier,
   WeakMapIdentifier,
   WeakSetIdentifier,
   ObjectIdentifier,
   ArrayIdentifier,
+  ClassIdentifier,
   NullIdentifier,
   MapIdentifier,
   SetIdentifier,
@@ -23,7 +23,7 @@ export abstract class SourceIdentifier {
     NullIdentifier,
     MapIdentifier,
     SetIdentifier,
-    ConstructorIdentifier,
+    ClassIdentifier,
     PrimitiveIdentifier,
   ];
 
@@ -51,10 +51,11 @@ export abstract class SourceIdentifier {
     this.rules.unshift(...rules);
   }
 
-  static identify(source: any): Metadata {
-    return this.rules
+  static identify<M extends Metadata>(source: any): M {
+    const identifier: SourceRule<any> = this.rules
       .map((Rule: SourceRuleConstruct<any>) => new Rule(source))
-      .find((rule: SourceRule<any>) => rule.canIdentify())
-      .identity();
+      .find((rule: SourceRule<any>) => rule.canIdentify()) as SourceRule<any>;
+
+    return identifier.identity();
   }
 }
