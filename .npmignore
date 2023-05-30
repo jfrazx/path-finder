@@ -31,3 +31,5 @@ scripts/
 .vscode/
 .github/
 coverage/
+.husky/
+.parcel-cache/

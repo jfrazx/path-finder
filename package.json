@@ -4,19 +4,26 @@
   "description": "Build property paths through objects and arrays",
   "source": "src/index.ts",
   "main": "dist/main.js",
-  "module": "dist/module.js",
+  "module": "dist/module.mjs",
   "types": "dist/types.d.ts",
   "scripts": {
     "coverage:check": "nyc check-coverage",
     "coverage:report": "nyc report --reporter=text-lcov > coverage.lcov",
     "coverage:post": "codecov",
+    "predocs": "rimraf docs",
+    "docs": "typedoc src/index.ts",
     "precoverage:test": "rimraf coverage",
     "coverage:test": "nyc mocha",
     "test": "mocha",
     "watch": "parcel watch",
     "prebuild": "rimraf dist",
     "build": "parcel build",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky install"
+  },
+  "exports": {
+    "import": "./dist/module.mjs",
+    "require": "./dist/main.js"
   },
   "repository": {
     "type": "git",
@@ -38,30 +45,34 @@
     "@parcel/packager-ts": "2.8.3",
     "@parcel/transformer-typescript-types": "2.8.3",
     "@semantic-release/commit-analyzer": "^9.0.2",
-    "@semantic-release/release-notes-generator": "^10.0.3",
-    "@types/chai": "^4.3.4",
+    "@semantic-release/github": "^8.0.7",
+    "@semantic-release/npm": "^10.0.3",
+    "@semantic-release/release-notes-generator": "^11.0.1",
+    "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.15.3",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@types/node": "^20.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
     "chai": "^4.3.7",
     "codecov": "^3.8.3",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.7.0",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "parcel": "^2.8.3",
-    "prettier": "^2.8.4",
-    "rimraf": "^4.4.0",
-    "semantic-release": "^20.1.1",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "semantic-release": "^21.0.2",
     "semantic-release-cli": "^5.4.4",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typedoc": "^0.24.7",
+    "typescript": "^5.0.4"
   },
   "config": {
     "commitizen": {
@@ -109,7 +120,9 @@
           }
         }
       ],
-      "@semantic-release/release-notes-generator"
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      "@semantic-release/npm"
     ]
   },
   "publishConfig": {
