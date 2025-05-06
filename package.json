@@ -41,7 +41,7 @@
     "@semantic-release/release-notes-generator": "^10.0.3",
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.15.3",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/parser": "^5.55.0",
     "chai": "^4.3.7",
     "codecov": "^3.8.3",
