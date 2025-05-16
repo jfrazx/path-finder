@@ -35,8 +35,8 @@
   "homepage": "https://github.com/jfrazx/path-finder#readme",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@parcel/packager-ts": "2.8.3",
-    "@parcel/transformer-typescript-types": "2.8.3",
+    "@parcel/packager-ts": "2.15.1",
+    "@parcel/transformer-typescript-types": "2.15.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
     "@types/chai": "^4.3.4",
