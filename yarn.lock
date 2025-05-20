@@ -1568,9 +1568,9 @@
     undici-types "~6.20.0"
 
 "@types/node@^18.15.3":
-  version "18.19.93"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.93.tgz#f5c132ff0592fdda796af4bdcc0e471e949188d7"
-  integrity sha512-11oqLpOCRmRCw3pgmcd7wiadQToDV4ho0NnZ9KGgpzOGCcpMTo3UEAgs7Y29tzZODazGibIXorykwqWq2ncvHQ==
+  version "18.19.102"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.102.tgz#b5fe360ce2937f039c16a8824233ea3c79130acf"
+  integrity sha512-8+SHxopyHeI9xdylfts948LTTr7ZOCSQWMEEDS1qmFIv1kdl03YoMcy3H2NhmxeozCxJiTw6al1h5PAp9h0a5w==
   dependencies:
     undici-types "~5.26.4"
 
