@@ -1568,9 +1568,9 @@
     undici-types "~6.20.0"
 
 "@types/node@^22.0.0":
-  version "22.15.20"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.20.tgz#ce4f947a8ff31120032f66d46b0851554e9f25f6"
-  integrity sha512-A6BohGFRGHAscJsTslDCA9JG7qSJr/DWUvrvY8yi9IgnGtMxCyat7vvQ//MFa0DnLsyuS3wYTpLdw4Hf+Q5JXw==
+  version "22.15.28"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.28.tgz#97d851fda6db030612fa0b472577bbc0fe0bc668"
+  integrity sha512-I0okKVDmyKR281I0UIFV7EWAWRnR0gkuSKob5wVcByyyhr7Px/slhkQapcYX4u00ekzNWaS1gznKZnuzxwo4pw==
   dependencies:
     undici-types "~6.21.0"
 
