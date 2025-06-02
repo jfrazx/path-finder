@@ -2,14 +2,15 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    "lcov",
-    "sloc",
-    "klass",
-    "esnext",
     "codecov",
-    "proxied",
+    "deregisters",
+    "esnext",
+    "klass",
+    "lcov",
     "prettierrc",
-    "deregisters"
+    "proxied",
+    "sloc",
+    "SNYK"
   ],
   "ignoreRegExpList": [
     "/\"(pre|post)[a-zA-Z]+\":/",

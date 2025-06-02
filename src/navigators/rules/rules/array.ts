@@ -1,16 +1,16 @@
 import type { Navigator } from '../../interfaces';
 import { ArrayNavigator } from '../../navigators';
-import { NavigatorRuleBase } from '../base';
+import { NavigationRule } from '../base';
 
 /**
  * @description Rule that identifies arrays and provides the Array Navigator
  *
  * @export
  * @class ArrayNavigatorRule
- * @extends {NavigatorRuleBase<T[]>}
+ * @extends {NavigationRule<T[]>}
  * @template T
  */
-export class ArrayNavigatorRule<T> extends NavigatorRuleBase<T[]> {
+export class ArrayNavigatorRule<T> extends NavigationRule<T[]> {
   shouldNavigate(): boolean {
     return Array.isArray(this.options.source);
   }
