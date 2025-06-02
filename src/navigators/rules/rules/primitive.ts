@@ -1,6 +1,6 @@
 import { PrimitiveNavigator } from '../../navigators';
 import type { Navigator } from '../../interfaces';
-import { NavigatorRuleBase } from '../base';
+import { NavigationRule } from '../base';
 
 /**
  * @description Rule that provides the Primitive Navigator
@@ -9,10 +9,10 @@ import { NavigatorRuleBase } from '../base';
  *
  * @export
  * @class PrimitiveNavigatorRule
- * @extends {NavigatorRuleBase<T>}
+ * @extends {NavigationRule<T>}
  * @template T
  */
-export class PrimitiveNavigatorRule<T> extends NavigatorRuleBase<T> {
+export class PrimitiveNavigatorRule<T> extends NavigationRule<T> {
   shouldNavigate(): boolean {
     return true;
   }
