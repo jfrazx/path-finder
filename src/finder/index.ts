@@ -74,9 +74,7 @@ export class PathFinder<T = any> implements Finder<T> {
     options: RequiredPathFinderOptions,
   ): Endpoint<Source>[] {
     const queue = new KeyPathQueue(keyPaths, options);
-    const collector = new Collector();
-
-    this.processQueue(queue, collector);
+    const collector = this.processQueue(queue);
 
     return [...collector.values()];
   }
@@ -89,7 +87,9 @@ export class PathFinder<T = any> implements Finder<T> {
    * @param {Collector} collector
    * @memberof PathFinder
    */
-  private processQueue(queue: KeyPathQueue, collector: Collector): void {
+  private processQueue(queue: KeyPathQueue): Collector {
+    const collector = new Collector();
+
     for (const keyPath of queue.process()) {
       const { isEndpoint, shouldContinue, pathComplete } = keyPath.identify(collector.size);
 
@@ -101,6 +101,8 @@ export class PathFinder<T = any> implements Finder<T> {
         queue.add(keyPath.navigate());
       }
     }
+
+    return collector;
   }
 
   private optionsModifier(options: Partial<PathFinderOptions>): RequiredPathFinderOptions {

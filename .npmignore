@@ -11,7 +11,9 @@ tslint.json
 .prettierrc
 .releaserc
 .nycrc.json
+.parcelrc
 cspell.json
+renovate.json
 *.lcov
 yarn.lock
 

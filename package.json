@@ -20,11 +20,13 @@
     "watch": "parcel watch",
     "semantic-release": "semantic-release",
     "prepare": "husky install",
+    "prepack": "npm run build",
     "check": "npm-check -u"
   },
   "exports": {
     "import": "./dist/module.mjs",
-    "require": "./dist/main.js"
+    "require": "./dist/main.js",
+    "types": "./dist/types.d.ts"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
   "homepage": "https://github.com/jfrazx/path-finder#readme",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@parcel/bundler-library": "^2.15.4",
     "@parcel/packager-ts": "^2.15.2",
     "@parcel/transformer-typescript-types": "^2.15.2",
     "@semantic-release/commit-analyzer": "^13.0.1",
@@ -60,7 +63,6 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.0.0",
-    "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^9.1.7",

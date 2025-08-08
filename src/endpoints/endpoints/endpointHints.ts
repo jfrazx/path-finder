@@ -23,7 +23,9 @@ export class EndpointHints<T> extends EndPointer<T> implements EndpointIdentity 
     const { strictHints, currentPath, hints } = this.options;
 
     return strictHints
-      ? new RegExp(hints.join('(\\[\\d+\\]\\.|\\.)')).test(currentPath)
+      ? new RegExp(
+          hints.map((hint) => this.escapeRegExp(hint)).join('(\\[\\d+\\]\\.|\\.)'),
+        ).test(currentPath)
       : hints.every((hint: string) => currentPath.includes(hint));
   }
 
@@ -33,5 +35,9 @@ export class EndpointHints<T> extends EndPointer<T> implements EndpointIdentity 
       this.hasNotReachedMaxDepth() &&
       this.sampleSizeNotMet(isEndpoint)
     );
+  }
+
+  private escapeRegExp(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 }
